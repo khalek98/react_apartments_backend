@@ -1,13 +1,13 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import cors from 'cors;';
+// import dotenv from 'dotenv';
+// import cors from 'cors;';
 
 import { createApartPostValidation } from './validations/validations.js';
 import { handleValidatonErrors } from './utils/index.js';
 import * as ApartsController from './controllers/ApartsController.js';
 
-dotenv.config();
+// dotenv.config();
 
 mongoose
   .connect(process.env.MONGODB_URI)
@@ -17,7 +17,7 @@ mongoose
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
 
 app.get('/', (req, res) =>
   res.send('<h1>Data Base for Apartments App by Khalek</h1>'),
