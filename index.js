@@ -10,9 +10,7 @@ import * as ApartsController from './controllers/ApartsController.js';
 const PORT = 4000;
 
 mongoose
-  .connect(
-    'mongodb+srv://admin:17supusaH@cluster0.ufyxye3.mongodb.net/apartments?retryWrites=true&w=majority',
-  )
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log('DB OK!'))
   .catch((err) => console.log('DB Error', err));
 
@@ -32,10 +30,12 @@ app.get('/', (req, res) =>
   res.send('<h1>Data Base for Apartments App by Khalek</h1>'),
 );
 
-app.listen(process.env.PORT || PORT, (err) => {
+app.listen(process.env.PORT, (err) => {
   if (err) {
     return console.warn(err);
   }
 
-  console.log(`Server has been started http://localhost:${PORT}/...`);
+  console.log(
+    `Server has been started http://localhost:${process.env.PORT}/...`,
+  );
 });
