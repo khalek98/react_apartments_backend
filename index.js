@@ -1,5 +1,4 @@
 import express from 'express';
-import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
@@ -10,16 +9,13 @@ import * as ApartsController from './controllers/ApartsController.js';
 dotenv.config();
 
 mongoose
-  .connect(
-    'mongodb+srv://admin:17supusaH@cluster0.ufyxye3.mongodb.net/apartments?retryWrites=true&w=majority',
-  )
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log('DB OK!'))
   .catch((err) => console.log('DB Error', err));
 
 const app = express();
 
 app.use(express.json());
-app.use(cors());
 
 app.get('/', (req, res) =>
   res.send('<h1>Data Base for Apartments App by Khalek</h1>'),
@@ -32,13 +28,10 @@ app.post(
   ApartsController.createApartPost,
 );
 
-app.listen(process.env.PORT || 4000, (err) => {
+app.listen(process.env.PORT, (err) => {
   if (err) {
     return console.warn(err);
   }
 
-  console.log(
-    `Server OK!`,
-    // `Server has been started http://localhost:${process.env.PORT || 4000}/...`,
-  );
+  console.log(`Server OK!`);
 });
