@@ -5,9 +5,14 @@ import mongoose from 'mongoose';
 import fs from 'fs';
 import dotenv from 'dotenv';
 
-import { createApartPostValidation } from './validations/validations.js';
-import { handleValidatonErrors } from './utils/index.js';
+import {
+  createApartPostValidation,
+  loginValidation,
+  registerValidation,
+} from './validations/validations.js';
+import { handleValidatonErrors, checkAuth } from './utils/index.js';
 import * as ApartsController from './controllers/ApartsController.js';
+import { UserController } from './controllers/index.js';
 
 dotenv.config();
 
@@ -37,16 +42,34 @@ app.use('/uploads', express.static('uploads'));
 app.get('/', (req, res) =>
   res.send('<h1>Data Base for Apartments App by Khalek</h1>'),
 );
+
+app.post(
+  '/auth/signIn',
+  loginValidation,
+  handleValidatonErrors,
+  UserController.login,
+);
+app.post(
+  '/auth/signUp',
+  registerValidation,
+  handleValidatonErrors,
+  UserController.register,
+);
+app.get('/auth/user', checkAuth, UserController.getUser);
+
 app.get('/aparts', ApartsController.getAllAparts);
 app.post(
   '/aparts',
+  checkAuth,
   createApartPostValidation,
   handleValidatonErrors,
   ApartsController.createApartPost,
 );
+
 app.post('/upload', (req, res) => {
   upload(req, res, (err) => {
-    // console.log(req.files);
+    if (err) console.log(err);
+
     let imgArr = [];
     const files = req.files;
     let index, len;

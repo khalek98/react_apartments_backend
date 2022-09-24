@@ -11,3 +11,25 @@ export const createApartPostValidation = [
   body('imgArr', 'This field must contain a string array').isArray(),
   body('location', 'Wrong!').isObject(),
 ];
+
+export const registerValidation = [
+  body('email', 'Wrong form email').isEmail(),
+  body('firstName', 'Firstname must be at least 2 characters long').isLength({
+    min: 2,
+  }),
+  body('lastName', 'Last name must be at least 2 characters long').isLength({
+    min: 2,
+  }),
+  body(
+    'password',
+    'Password length must be at least 8 characters long',
+  ).isLength({ min: 8 }),
+];
+
+export const loginValidation = [
+  body('email', 'Wrong form email').isEmail(),
+  body(
+    'password',
+    'Password length must be at least 8 characters long',
+  ).isLength({ min: 8 }),
+];
