@@ -6,10 +6,10 @@ export const getAllAparts = async (req, res) => {
 
     res.json(aparts);
   } catch (error) {
-    console.log(error);
-
+    // console.log(error);
     res.status(500).json({
       message: 'Failed to get posts',
+      err,
     });
   }
 };
@@ -23,15 +23,17 @@ export const createApartPost = async (req, res) => {
       price: req.body.price,
       imgArr: req.body.imgArr,
       location: req.body.location,
+      user: req.userId,
     });
 
     const post = await doc.save();
 
     res.json(post);
   } catch (err) {
-    console.warn(err);
+    // console.log(err);
     res.status(500).json({
       message: 'Failed to create new Apartment post',
+      err,
     });
   }
 };

@@ -14,7 +14,6 @@ const ApartSchema = new mongoose.Schema(
     description: {
       type: String,
       required: true,
-      unique: true,
     },
     price: {
       type: Number,
@@ -27,6 +26,11 @@ const ApartSchema = new mongoose.Schema(
     location: {
       longitude: { required: true, type: String },
       latitude: { required: true, type: String },
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
     },
   },
   {
