@@ -33,3 +33,16 @@ export const loginValidation = [
     'Password length must be at least 8 characters long',
   ).isLength({ min: 8 }),
 ];
+
+export const editUserValidation = [
+  body('email', 'Wrong form email').isEmail(),
+  body('firstName', 'Firstname must be at least 2 characters long').isLength({
+    min: 2,
+  }),
+  body('lastName', 'Last name must be at least 2 characters long').isLength({
+    min: 2,
+  }),
+  body('password', 'Password length must be at least 8 characters long')
+    .optional()
+    .isLength({ min: 8 }),
+];

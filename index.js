@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 
 import {
   createApartPostValidation,
+  editUserValidation,
   loginValidation,
   registerValidation,
 } from './validations/validations.js';
@@ -56,6 +57,13 @@ app.post(
   UserController.register,
 );
 app.get('/auth/user', checkAuth, UserController.getUser);
+app.patch(
+  '/user',
+  checkAuth,
+  editUserValidation,
+  handleValidatonErrors,
+  UserController.userEdit,
+);
 
 app.get('/aparts', ApartsController.getAllAparts);
 app.post(

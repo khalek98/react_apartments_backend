@@ -109,3 +109,54 @@ export const getUser = async (req, res) => {
     });
   }
 };
+
+export const userEdit = async (req, res) => {
+  try {
+    let password = req.body.password;
+    let salt = await bcrypt.genSalt(10);
+    let hash;
+
+    try {
+      password = req.body.password;
+      salt = await bcrypt.genSalt(10);
+      hash = await bcrypt.hash(password, salt);
+    } catch {
+      console.log('err');
+    }
+
+    const update = {
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      passwordHash: hash,
+    };
+
+    const user = await userModel.findOneAndUpdate(
+      { _id: req.body.id },
+      update,
+      { new: true },
+    );
+
+    const token = jwt.sign(
+      {
+        _id: req.body.id,
+      },
+      'secretApart2022',
+      {
+        expiresIn: '30d',
+      },
+    );
+
+    const { passwordHash, ...userData } = user._doc;
+
+    res.json({
+      ...userData,
+      token,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: 'Failed to update user info',
+      error,
+    });
+  }
+};
