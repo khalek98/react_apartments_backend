@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
 import userModel from '../models/User.js';
+import ApartModel from '../models/Apart.js';
 
 export const register = async (req, res) => {
   try {
@@ -45,6 +46,7 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const user = await userModel.findOne({ email: req.body.email });
+    const userPosts = await ApartModel.find({ user: user._id });
 
     if (!user) {
       return res.status(404).json({
@@ -76,7 +78,8 @@ export const login = async (req, res) => {
     const { passwordHash, ...userData } = user._doc;
 
     res.json({
-      ...userData,
+      userData,
+      userPosts,
       token,
     });
   } catch (err) {
@@ -91,6 +94,7 @@ export const login = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const user = await userModel.findById(req.userId);
+    const userPosts = await ApartModel.find({ user });
 
     if (!user) {
       return res.status(404).json({
@@ -100,7 +104,7 @@ export const getUser = async (req, res) => {
 
     const { passwordHash, ...userData } = user._doc;
 
-    res.json(userData);
+    res.json({ userData, userPosts });
   } catch (error) {
     // console.log(error);
     res.status(500).json({
